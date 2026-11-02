@@ -1,0 +1,12 @@
+.git
+.venv
+.github
+__pycache__
+*.pyc
+data
+outputs
+docs
+tests
+*.nii
+*.nii.gz
+*.dcm

@@ -17,7 +17,7 @@ from . import clinical_info, image_analysis, security
 from .ct_upload_demo import _parse_multipart_form, _safe_name
 
 HOST = os.environ.get("LUNG_GUI_HOST", "127.0.0.1")
-PORT = int(os.environ.get("GUI_PORT", "8005"))
+PORT = int(os.environ.get("GUI_PORT") or os.environ.get("PORT") or 8005)
 TRAINING_DIR = Path(__file__).resolve().parents[2] / "data" / "training_uploads"
 CONSENT_VERSION = "2026-11-v1"
 CONSENT_TEXT = (
@@ -336,6 +336,9 @@ class LungGUIHandler(BaseHTTPRequestHandler):
         return security.cookie_is_valid(self.headers.get("Cookie"), security.access_token())
 
     def do_GET(self):
+        if urlparse(self.path).path == "/healthz":
+            self._send(200, "ok")
+            return
         if urlparse(self.path).path not in ("/", "/upload"):
             self._send(404, _error_page("That page does not exist."))
         elif not self._authed():
