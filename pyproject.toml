@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lung-cancer-imaging-analysis"
+version = "0.1.0"
+description = "Patient-matched lung cancer CT analysis on TCIA CMB-LCA: similarity, clustering, longitudinal change, lesion detection, severity grading."
+authors = [{name = "Muhamad Frendy"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "requests>=2.31",
+  "scikit-learn>=1.4",
+  "Pillow>=10.0",
+  "scipy",
+  "scikit-image",
+  "matplotlib",
+  "nibabel",
+  "SimpleITK"
+]
+
+[project.optional-dependencies]
+segmentation = ["TotalSegmentator"]
+
+[project.scripts]
+lung-imaging = "lung_imaging_analysis.cli:main"
+lung-ct-demo = "lung_imaging_analysis.ct_upload_demo:main"
+lung-lesion = "lung_imaging_analysis.lesion_cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

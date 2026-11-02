@@ -1,0 +1,1488 @@
+{
+  "collection": "CMB-LCA",
+  "fetched_at_utc": "2026-11-02T08:41:57.980708+00:00",
+  "patient_count": 129,
+  "patients": [
+    {
+      "patient_id": "MSB-00179",
+      "study_count": 9,
+      "series_count": 58,
+      "modality": "CT",
+      "modalities": {
+        "CT": 58
+      },
+      "image_count": 6596
+    },
+    {
+      "patient_id": "MSB-00316",
+      "study_count": 4,
+      "series_count": 4,
+      "modality": "CT",
+      "modalities": {
+        "CT": 4
+      },
+      "image_count": 222
+    },
+    {
+      "patient_id": "MSB-00556",
+      "study_count": 9,
+      "series_count": 50,
+      "modality": "CT",
+      "modalities": {
+        "PT": 10,
+        "CT": 40
+      },
+      "image_count": 7026
+    },
+    {
+      "patient_id": "MSB-00755",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 948
+    },
+    {
+      "patient_id": "MSB-00773",
+      "study_count": 7,
+      "series_count": 62,
+      "modality": "CT",
+      "modalities": {
+        "CT": 62
+      },
+      "image_count": 7644
+    },
+    {
+      "patient_id": "MSB-00799",
+      "study_count": 3,
+      "series_count": 16,
+      "modality": "CT",
+      "modalities": {
+        "CT": 14,
+        "MR": 2
+      },
+      "image_count": 1945
+    },
+    {
+      "patient_id": "MSB-00939",
+      "study_count": 6,
+      "series_count": 30,
+      "modality": "CT",
+      "modalities": {
+        "CT": 29,
+        "US": 1
+      },
+      "image_count": 4477
+    },
+    {
+      "patient_id": "MSB-01110",
+      "study_count": 5,
+      "series_count": 10,
+      "modality": "CT",
+      "modalities": {
+        "CT": 9,
+        "MR": 1
+      },
+      "image_count": 815
+    },
+    {
+      "patient_id": "MSB-01307",
+      "study_count": 1,
+      "series_count": 9,
+      "modality": "CT",
+      "modalities": {
+        "CT": 9
+      },
+      "image_count": 890
+    },
+    {
+      "patient_id": "MSB-01413",
+      "study_count": 2,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "PT": 1,
+        "CT": 6
+      },
+      "image_count": 757
+    },
+    {
+      "patient_id": "MSB-01434",
+      "study_count": 7,
+      "series_count": 64,
+      "modality": "CT",
+      "modalities": {
+        "CT": 64
+      },
+      "image_count": 12247
+    },
+    {
+      "patient_id": "MSB-01459",
+      "study_count": 3,
+      "series_count": 18,
+      "modality": "CT",
+      "modalities": {
+        "CT": 16,
+        "DX": 2
+      },
+      "image_count": 1740
+    },
+    {
+      "patient_id": "MSB-01491",
+      "study_count": 2,
+      "series_count": 3,
+      "modality": "MR",
+      "modalities": {
+        "CT": 1,
+        "MR": 2
+      },
+      "image_count": 1118
+    },
+    {
+      "patient_id": "MSB-01499",
+      "study_count": 6,
+      "series_count": 41,
+      "modality": "CT",
+      "modalities": {
+        "CT": 41
+      },
+      "image_count": 5581
+    },
+    {
+      "patient_id": "MSB-01597",
+      "study_count": 1,
+      "series_count": 4,
+      "modality": "CT",
+      "modalities": {
+        "CT": 4
+      },
+      "image_count": 310
+    },
+    {
+      "patient_id": "MSB-01617",
+      "study_count": 2,
+      "series_count": 2,
+      "modality": "CT",
+      "modalities": {
+        "CT": 2
+      },
+      "image_count": 362
+    },
+    {
+      "patient_id": "MSB-01649",
+      "study_count": 7,
+      "series_count": 30,
+      "modality": "CT",
+      "modalities": {
+        "CT": 28,
+        "PT": 1,
+        "MR": 1
+      },
+      "image_count": 4536
+    },
+    {
+      "patient_id": "MSB-01762",
+      "study_count": 3,
+      "series_count": 22,
+      "modality": "CT",
+      "modalities": {
+        "CT": 22
+      },
+      "image_count": 2415
+    },
+    {
+      "patient_id": "MSB-01772",
+      "study_count": 5,
+      "series_count": 31,
+      "modality": "CT",
+      "modalities": {
+        "CT": 21,
+        "MR": 10
+      },
+      "image_count": 4319
+    },
+    {
+      "patient_id": "MSB-01776",
+      "study_count": 6,
+      "series_count": 28,
+      "modality": "CT",
+      "modalities": {
+        "CT": 26,
+        "MR": 2
+      },
+      "image_count": 4942
+    },
+    {
+      "patient_id": "MSB-01973",
+      "study_count": 6,
+      "series_count": 39,
+      "modality": "CT",
+      "modalities": {
+        "CT": 39
+      },
+      "image_count": 6348
+    },
+    {
+      "patient_id": "MSB-02018",
+      "study_count": 1,
+      "series_count": 2,
+      "modality": "CT",
+      "modalities": {
+        "CT": 2
+      },
+      "image_count": 409
+    },
+    {
+      "patient_id": "MSB-02118",
+      "study_count": 1,
+      "series_count": 2,
+      "modality": "PT",
+      "modalities": {
+        "PT": 1,
+        "CT": 1
+      },
+      "image_count": 33
+    },
+    {
+      "patient_id": "MSB-02120",
+      "study_count": 4,
+      "series_count": 15,
+      "modality": "CT",
+      "modalities": {
+        "US": 3,
+        "CT": 12
+      },
+      "image_count": 2422
+    },
+    {
+      "patient_id": "MSB-02291",
+      "study_count": 5,
+      "series_count": 24,
+      "modality": "CT",
+      "modalities": {
+        "CT": 11,
+        "MR": 11,
+        "NM": 2
+      },
+      "image_count": 1601
+    },
+    {
+      "patient_id": "MSB-02302",
+      "study_count": 1,
+      "series_count": 6,
+      "modality": "CT",
+      "modalities": {
+        "CT": 6
+      },
+      "image_count": 1050
+    },
+    {
+      "patient_id": "MSB-02367",
+      "study_count": 6,
+      "series_count": 28,
+      "modality": "CT",
+      "modalities": {
+        "CT": 27,
+        "MR": 1
+      },
+      "image_count": 4101
+    },
+    {
+      "patient_id": "MSB-02370",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "PT",
+      "modalities": {
+        "PT": 1
+      },
+      "image_count": 32
+    },
+    {
+      "patient_id": "MSB-02428",
+      "study_count": 3,
+      "series_count": 13,
+      "modality": "CT",
+      "modalities": {
+        "CT": 12,
+        "PT": 1
+      },
+      "image_count": 1063
+    },
+    {
+      "patient_id": "MSB-02457",
+      "study_count": 8,
+      "series_count": 57,
+      "modality": "CT",
+      "modalities": {
+        "CT": 53,
+        "PT": 1,
+        "MR": 3
+      },
+      "image_count": 7323
+    },
+    {
+      "patient_id": "MSB-02478",
+      "study_count": 2,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 742
+    },
+    {
+      "patient_id": "MSB-02506",
+      "study_count": 6,
+      "series_count": 22,
+      "modality": "CT",
+      "modalities": {
+        "CT": 22
+      },
+      "image_count": 2517
+    },
+    {
+      "patient_id": "MSB-02861",
+      "study_count": 8,
+      "series_count": 48,
+      "modality": "CT",
+      "modalities": {
+        "CT": 48
+      },
+      "image_count": 8465
+    },
+    {
+      "patient_id": "MSB-02936",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 1487
+    },
+    {
+      "patient_id": "MSB-03108",
+      "study_count": 4,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 370
+    },
+    {
+      "patient_id": "MSB-03308",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "CT",
+      "modalities": {
+        "CT": 1
+      },
+      "image_count": 1
+    },
+    {
+      "patient_id": "MSB-03330",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "CT",
+      "modalities": {
+        "CT": 1
+      },
+      "image_count": 1
+    },
+    {
+      "patient_id": "MSB-03418",
+      "study_count": 3,
+      "series_count": 18,
+      "modality": "CT",
+      "modalities": {
+        "CT": 18
+      },
+      "image_count": 2752
+    },
+    {
+      "patient_id": "MSB-03548",
+      "study_count": 1,
+      "series_count": 5,
+      "modality": "CT",
+      "modalities": {
+        "CT": 5
+      },
+      "image_count": 464
+    },
+    {
+      "patient_id": "MSB-03592",
+      "study_count": 5,
+      "series_count": 26,
+      "modality": "CT",
+      "modalities": {
+        "CT": 17,
+        "MR": 9
+      },
+      "image_count": 2750
+    },
+    {
+      "patient_id": "MSB-03638",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 1184
+    },
+    {
+      "patient_id": "MSB-03700",
+      "study_count": 3,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 680
+    },
+    {
+      "patient_id": "MSB-03790",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "CT",
+      "modalities": {
+        "CT": 1
+      },
+      "image_count": 419
+    },
+    {
+      "patient_id": "MSB-04096",
+      "study_count": 6,
+      "series_count": 29,
+      "modality": "CT",
+      "modalities": {
+        "CT": 28,
+        "US": 1
+      },
+      "image_count": 4511
+    },
+    {
+      "patient_id": "MSB-04248",
+      "study_count": 1,
+      "series_count": 9,
+      "modality": "CT",
+      "modalities": {
+        "CT": 9
+      },
+      "image_count": 1870
+    },
+    {
+      "patient_id": "MSB-04286",
+      "study_count": 10,
+      "series_count": 47,
+      "modality": "CT",
+      "modalities": {
+        "CT": 46,
+        "MR": 1
+      },
+      "image_count": 6745
+    },
+    {
+      "patient_id": "MSB-04315",
+      "study_count": 1,
+      "series_count": 9,
+      "modality": "CT",
+      "modalities": {
+        "CT": 9
+      },
+      "image_count": 1477
+    },
+    {
+      "patient_id": "MSB-04319",
+      "study_count": 1,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 976
+    },
+    {
+      "patient_id": "MSB-04332",
+      "study_count": 2,
+      "series_count": 13,
+      "modality": "CT",
+      "modalities": {
+        "CT": 13
+      },
+      "image_count": 1109
+    },
+    {
+      "patient_id": "MSB-04388",
+      "study_count": 7,
+      "series_count": 45,
+      "modality": "CT",
+      "modalities": {
+        "CT": 30,
+        "PT": 1,
+        "MR": 14
+      },
+      "image_count": 4446
+    },
+    {
+      "patient_id": "MSB-04567",
+      "study_count": 5,
+      "series_count": 22,
+      "modality": "CT",
+      "modalities": {
+        "CT": 21,
+        "PT": 1
+      },
+      "image_count": 2264
+    },
+    {
+      "patient_id": "MSB-04569",
+      "study_count": 3,
+      "series_count": 14,
+      "modality": "CT",
+      "modalities": {
+        "CT": 14
+      },
+      "image_count": 2301
+    },
+    {
+      "patient_id": "MSB-04620",
+      "study_count": 2,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 608
+    },
+    {
+      "patient_id": "MSB-04630",
+      "study_count": 2,
+      "series_count": 11,
+      "modality": "CT",
+      "modalities": {
+        "CT": 11
+      },
+      "image_count": 1490
+    },
+    {
+      "patient_id": "MSB-04797",
+      "study_count": 6,
+      "series_count": 25,
+      "modality": "CT",
+      "modalities": {
+        "CT": 25
+      },
+      "image_count": 2460
+    },
+    {
+      "patient_id": "MSB-04805",
+      "study_count": 2,
+      "series_count": 2,
+      "modality": "MR",
+      "modalities": {
+        "MR": 1,
+        "US": 1
+      },
+      "image_count": 74
+    },
+    {
+      "patient_id": "MSB-04849",
+      "study_count": 4,
+      "series_count": 38,
+      "modality": "CT",
+      "modalities": {
+        "CT": 38
+      },
+      "image_count": 5207
+    },
+    {
+      "patient_id": "MSB-04962",
+      "study_count": 4,
+      "series_count": 22,
+      "modality": "CT",
+      "modalities": {
+        "CT": 22
+      },
+      "image_count": 2791
+    },
+    {
+      "patient_id": "MSB-04968",
+      "study_count": 9,
+      "series_count": 45,
+      "modality": "CT",
+      "modalities": {
+        "CT": 44,
+        "US": 1
+      },
+      "image_count": 5946
+    },
+    {
+      "patient_id": "MSB-05098",
+      "study_count": 5,
+      "series_count": 22,
+      "modality": "CT",
+      "modalities": {
+        "CT": 22
+      },
+      "image_count": 1752
+    },
+    {
+      "patient_id": "MSB-05256",
+      "study_count": 5,
+      "series_count": 38,
+      "modality": "CT",
+      "modalities": {
+        "CT": 38
+      },
+      "image_count": 5333
+    },
+    {
+      "patient_id": "MSB-05281",
+      "study_count": 10,
+      "series_count": 86,
+      "modality": "MR",
+      "modalities": {
+        "CT": 31,
+        "MR": 54,
+        "PT": 1
+      },
+      "image_count": 6554
+    },
+    {
+      "patient_id": "MSB-05326",
+      "study_count": 3,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 6,
+        "PT": 1
+      },
+      "image_count": 423
+    },
+    {
+      "patient_id": "MSB-05332",
+      "study_count": 3,
+      "series_count": 20,
+      "modality": "CT",
+      "modalities": {
+        "CT": 20
+      },
+      "image_count": 2684
+    },
+    {
+      "patient_id": "MSB-05365",
+      "study_count": 7,
+      "series_count": 48,
+      "modality": "MR",
+      "modalities": {
+        "PT": 1,
+        "CT": 18,
+        "MR": 29
+      },
+      "image_count": 3753
+    },
+    {
+      "patient_id": "MSB-05387",
+      "study_count": 3,
+      "series_count": 29,
+      "modality": "CT",
+      "modalities": {
+        "CT": 29
+      },
+      "image_count": 6303
+    },
+    {
+      "patient_id": "MSB-05388",
+      "study_count": 8,
+      "series_count": 47,
+      "modality": "CT",
+      "modalities": {
+        "CT": 47
+      },
+      "image_count": 10425
+    },
+    {
+      "patient_id": "MSB-05450",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "CT",
+      "modalities": {
+        "CT": 1
+      },
+      "image_count": 365
+    },
+    {
+      "patient_id": "MSB-05460",
+      "study_count": 1,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 779
+    },
+    {
+      "patient_id": "MSB-05756",
+      "study_count": 18,
+      "series_count": 80,
+      "modality": "CT",
+      "modalities": {
+        "CT": 67,
+        "MR": 12,
+        "PT": 1
+      },
+      "image_count": 10386
+    },
+    {
+      "patient_id": "MSB-05767",
+      "study_count": 8,
+      "series_count": 63,
+      "modality": "CT",
+      "modalities": {
+        "CT": 48,
+        "MR": 15
+      },
+      "image_count": 6469
+    },
+    {
+      "patient_id": "MSB-05837",
+      "study_count": 3,
+      "series_count": 13,
+      "modality": "CT",
+      "modalities": {
+        "CT": 12,
+        "US": 1
+      },
+      "image_count": 1967
+    },
+    {
+      "patient_id": "MSB-05876",
+      "study_count": 2,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 535
+    },
+    {
+      "patient_id": "MSB-05915",
+      "study_count": 5,
+      "series_count": 14,
+      "modality": "CT",
+      "modalities": {
+        "CT": 13,
+        "PT": 1
+      },
+      "image_count": 1980
+    },
+    {
+      "patient_id": "MSB-06059",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 977
+    },
+    {
+      "patient_id": "MSB-06072",
+      "study_count": 1,
+      "series_count": 27,
+      "modality": "MR",
+      "modalities": {
+        "MR": 27
+      },
+      "image_count": 2706
+    },
+    {
+      "patient_id": "MSB-06150",
+      "study_count": 2,
+      "series_count": 5,
+      "modality": "CT",
+      "modalities": {
+        "CT": 4,
+        "US": 1
+      },
+      "image_count": 429
+    },
+    {
+      "patient_id": "MSB-06160",
+      "study_count": 6,
+      "series_count": 46,
+      "modality": "CT",
+      "modalities": {
+        "CT": 46
+      },
+      "image_count": 7012
+    },
+    {
+      "patient_id": "MSB-06197",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "PT",
+      "modalities": {
+        "PT": 1
+      },
+      "image_count": 32
+    },
+    {
+      "patient_id": "MSB-06249",
+      "study_count": 5,
+      "series_count": 31,
+      "modality": "CT",
+      "modalities": {
+        "CT": 31
+      },
+      "image_count": 4270
+    },
+    {
+      "patient_id": "MSB-06387",
+      "study_count": 2,
+      "series_count": 10,
+      "modality": "CT",
+      "modalities": {
+        "CT": 10
+      },
+      "image_count": 538
+    },
+    {
+      "patient_id": "MSB-06433",
+      "study_count": 5,
+      "series_count": 26,
+      "modality": "CT",
+      "modalities": {
+        "CT": 25,
+        "US": 1
+      },
+      "image_count": 5515
+    },
+    {
+      "patient_id": "MSB-06482",
+      "study_count": 3,
+      "series_count": 12,
+      "modality": "CT",
+      "modalities": {
+        "CT": 12
+      },
+      "image_count": 1584
+    },
+    {
+      "patient_id": "MSB-06640",
+      "study_count": 4,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 441
+    },
+    {
+      "patient_id": "MSB-06653",
+      "study_count": 2,
+      "series_count": 6,
+      "modality": "CT",
+      "modalities": {
+        "CT": 5,
+        "PT": 1
+      },
+      "image_count": 850
+    },
+    {
+      "patient_id": "MSB-06720",
+      "study_count": 10,
+      "series_count": 78,
+      "modality": "CT",
+      "modalities": {
+        "CT": 78
+      },
+      "image_count": 7911
+    },
+    {
+      "patient_id": "MSB-06810",
+      "study_count": 7,
+      "series_count": 47,
+      "modality": "CT",
+      "modalities": {
+        "CT": 44,
+        "MR": 3
+      },
+      "image_count": 8684
+    },
+    {
+      "patient_id": "MSB-06824",
+      "study_count": 1,
+      "series_count": 6,
+      "modality": "CT",
+      "modalities": {
+        "CT": 6
+      },
+      "image_count": 552
+    },
+    {
+      "patient_id": "MSB-06864",
+      "study_count": 2,
+      "series_count": 17,
+      "modality": "MR",
+      "modalities": {
+        "MR": 15,
+        "CT": 2
+      },
+      "image_count": 1165
+    },
+    {
+      "patient_id": "MSB-06876",
+      "study_count": 5,
+      "series_count": 36,
+      "modality": "CT",
+      "modalities": {
+        "CT": 26,
+        "MR": 10
+      },
+      "image_count": 5016
+    },
+    {
+      "patient_id": "MSB-06965",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 1230
+    },
+    {
+      "patient_id": "MSB-07272",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 824
+    },
+    {
+      "patient_id": "MSB-07311",
+      "study_count": 1,
+      "series_count": 2,
+      "modality": "CT",
+      "modalities": {
+        "CT": 2
+      },
+      "image_count": 128
+    },
+    {
+      "patient_id": "MSB-07342",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "US",
+      "modalities": {
+        "US": 1
+      },
+      "image_count": 1
+    },
+    {
+      "patient_id": "MSB-07520",
+      "study_count": 1,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 1558
+    },
+    {
+      "patient_id": "MSB-07578",
+      "study_count": 1,
+      "series_count": 4,
+      "modality": "CT",
+      "modalities": {
+        "CT": 4
+      },
+      "image_count": 297
+    },
+    {
+      "patient_id": "MSB-07631",
+      "study_count": 1,
+      "series_count": 5,
+      "modality": "CT",
+      "modalities": {
+        "CT": 5
+      },
+      "image_count": 536
+    },
+    {
+      "patient_id": "MSB-07636",
+      "study_count": 5,
+      "series_count": 38,
+      "modality": "CT",
+      "modalities": {
+        "PT": 1,
+        "CT": 37
+      },
+      "image_count": 5150
+    },
+    {
+      "patient_id": "MSB-07662",
+      "study_count": 2,
+      "series_count": 11,
+      "modality": "CT",
+      "modalities": {
+        "CT": 10,
+        "PT": 1
+      },
+      "image_count": 1215
+    },
+    {
+      "patient_id": "MSB-07686",
+      "study_count": 1,
+      "series_count": 3,
+      "modality": "CT",
+      "modalities": {
+        "PT": 1,
+        "CT": 2
+      },
+      "image_count": 157
+    },
+    {
+      "patient_id": "MSB-07700",
+      "study_count": 3,
+      "series_count": 20,
+      "modality": "CT",
+      "modalities": {
+        "CT": 20
+      },
+      "image_count": 2479
+    },
+    {
+      "patient_id": "MSB-07727",
+      "study_count": 4,
+      "series_count": 12,
+      "modality": "CT",
+      "modalities": {
+        "PT": 2,
+        "CT": 10
+      },
+      "image_count": 1258
+    },
+    {
+      "patient_id": "MSB-07864",
+      "study_count": 12,
+      "series_count": 60,
+      "modality": "CT",
+      "modalities": {
+        "CT": 58,
+        "PT": 2
+      },
+      "image_count": 6890
+    },
+    {
+      "patient_id": "MSB-07873",
+      "study_count": 6,
+      "series_count": 35,
+      "modality": "CT",
+      "modalities": {
+        "CT": 35
+      },
+      "image_count": 7216
+    },
+    {
+      "patient_id": "MSB-07945",
+      "study_count": 1,
+      "series_count": 4,
+      "modality": "CT",
+      "modalities": {
+        "CT": 4
+      },
+      "image_count": 444
+    },
+    {
+      "patient_id": "MSB-08242",
+      "study_count": 1,
+      "series_count": 6,
+      "modality": "CT",
+      "modalities": {
+        "CT": 6
+      },
+      "image_count": 643
+    },
+    {
+      "patient_id": "MSB-08249",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "CT",
+      "modalities": {
+        "CT": 1
+      },
+      "image_count": 1
+    },
+    {
+      "patient_id": "MSB-08267",
+      "study_count": 6,
+      "series_count": 36,
+      "modality": "CT",
+      "modalities": {
+        "CT": 36
+      },
+      "image_count": 4538
+    },
+    {
+      "patient_id": "MSB-08354",
+      "study_count": 1,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 728
+    },
+    {
+      "patient_id": "MSB-08454",
+      "study_count": 1,
+      "series_count": 1,
+      "modality": "CT",
+      "modalities": {
+        "CT": 1
+      },
+      "image_count": 1
+    },
+    {
+      "patient_id": "MSB-08476",
+      "study_count": 4,
+      "series_count": 12,
+      "modality": "CT",
+      "modalities": {
+        "CT": 12
+      },
+      "image_count": 902
+    },
+    {
+      "patient_id": "MSB-08583",
+      "study_count": 4,
+      "series_count": 17,
+      "modality": "MR",
+      "modalities": {
+        "MR": 11,
+        "CT": 5,
+        "NM": 1
+      },
+      "image_count": 1877
+    },
+    {
+      "patient_id": "MSB-08777",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 886
+    },
+    {
+      "patient_id": "MSB-08789",
+      "study_count": 1,
+      "series_count": 7,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7
+      },
+      "image_count": 1462
+    },
+    {
+      "patient_id": "MSB-08841",
+      "study_count": 2,
+      "series_count": 13,
+      "modality": "CT",
+      "modalities": {
+        "CT": 13
+      },
+      "image_count": 2294
+    },
+    {
+      "patient_id": "MSB-08867",
+      "study_count": 1,
+      "series_count": 10,
+      "modality": "CT",
+      "modalities": {
+        "CT": 10
+      },
+      "image_count": 1515
+    },
+    {
+      "patient_id": "MSB-08928",
+      "study_count": 2,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 7,
+        "MR": 1
+      },
+      "image_count": 1061
+    },
+    {
+      "patient_id": "MSB-08964",
+      "study_count": 5,
+      "series_count": 30,
+      "modality": "CT",
+      "modalities": {
+        "CT": 30
+      },
+      "image_count": 4032
+    },
+    {
+      "patient_id": "MSB-09027",
+      "study_count": 12,
+      "series_count": 94,
+      "modality": "CT",
+      "modalities": {
+        "CT": 63,
+        "MR": 30,
+        "NM": 1
+      },
+      "image_count": 8912
+    },
+    {
+      "patient_id": "MSB-09117",
+      "study_count": 4,
+      "series_count": 21,
+      "modality": "CT",
+      "modalities": {
+        "CT": 21
+      },
+      "image_count": 2873
+    },
+    {
+      "patient_id": "MSB-09518",
+      "study_count": 5,
+      "series_count": 25,
+      "modality": "CT",
+      "modalities": {
+        "CT": 23,
+        "MR": 1,
+        "PT": 1
+      },
+      "image_count": 3250
+    },
+    {
+      "patient_id": "MSB-09521",
+      "study_count": 3,
+      "series_count": 26,
+      "modality": "CT",
+      "modalities": {
+        "CT": 26
+      },
+      "image_count": 3948
+    },
+    {
+      "patient_id": "MSB-09560",
+      "study_count": 1,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 1021
+    },
+    {
+      "patient_id": "MSB-09604",
+      "study_count": 2,
+      "series_count": 10,
+      "modality": "CT",
+      "modalities": {
+        "CT": 10
+      },
+      "image_count": 1236
+    },
+    {
+      "patient_id": "MSB-09710",
+      "study_count": 1,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 8
+      },
+      "image_count": 2148
+    },
+    {
+      "patient_id": "MSB-09794",
+      "study_count": 11,
+      "series_count": 79,
+      "modality": "CT",
+      "modalities": {
+        "MR": 22,
+        "CT": 47,
+        "NM": 8,
+        "DX": 2
+      },
+      "image_count": 4665
+    },
+    {
+      "patient_id": "MSB-09880",
+      "study_count": 9,
+      "series_count": 20,
+      "modality": "CT",
+      "modalities": {
+        "CT": 19,
+        "US": 1
+      },
+      "image_count": 1400
+    },
+    {
+      "patient_id": "MSB-09960",
+      "study_count": 6,
+      "series_count": 17,
+      "modality": "CT",
+      "modalities": {
+        "CT": 17
+      },
+      "image_count": 1653
+    },
+    {
+      "patient_id": "MSB-09977",
+      "study_count": 3,
+      "series_count": 8,
+      "modality": "CT",
+      "modalities": {
+        "CT": 6,
+        "US": 2
+      },
+      "image_count": 969
+    }
+  ],
+  "patient_ids": [
+    "MSB-00179",
+    "MSB-00316",
+    "MSB-00556",
+    "MSB-00755",
+    "MSB-00773",
+    "MSB-00799",
+    "MSB-00939",
+    "MSB-01110",
+    "MSB-01307",
+    "MSB-01413",
+    "MSB-01434",
+    "MSB-01459",
+    "MSB-01491",
+    "MSB-01499",
+    "MSB-01597",
+    "MSB-01617",
+    "MSB-01649",
+    "MSB-01762",
+    "MSB-01772",
+    "MSB-01776",
+    "MSB-01973",
+    "MSB-02018",
+    "MSB-02118",
+    "MSB-02120",
+    "MSB-02291",
+    "MSB-02302",
+    "MSB-02367",
+    "MSB-02370",
+    "MSB-02428",
+    "MSB-02457",
+    "MSB-02478",
+    "MSB-02506",
+    "MSB-02861",
+    "MSB-02936",
+    "MSB-03108",
+    "MSB-03308",
+    "MSB-03330",
+    "MSB-03418",
+    "MSB-03548",
+    "MSB-03592",
+    "MSB-03638",
+    "MSB-03700",
+    "MSB-03790",
+    "MSB-04096",
+    "MSB-04248",
+    "MSB-04286",
+    "MSB-04315",
+    "MSB-04319",
+    "MSB-04332",
+    "MSB-04388",
+    "MSB-04567",
+    "MSB-04569",
+    "MSB-04620",
+    "MSB-04630",
+    "MSB-04797",
+    "MSB-04805",
+    "MSB-04849",
+    "MSB-04962",
+    "MSB-04968",
+    "MSB-05098",
+    "MSB-05256",
+    "MSB-05281",
+    "MSB-05326",
+    "MSB-05332",
+    "MSB-05365",
+    "MSB-05387",
+    "MSB-05388",
+    "MSB-05450",
+    "MSB-05460",
+    "MSB-05756",
+    "MSB-05767",
+    "MSB-05837",
+    "MSB-05876",
+    "MSB-05915",
+    "MSB-06059",
+    "MSB-06072",
+    "MSB-06150",
+    "MSB-06160",
+    "MSB-06197",
+    "MSB-06249",
+    "MSB-06387",
+    "MSB-06433",
+    "MSB-06482",
+    "MSB-06640",
+    "MSB-06653",
+    "MSB-06720",
+    "MSB-06810",
+    "MSB-06824",
+    "MSB-06864",
+    "MSB-06876",
+    "MSB-06965",
+    "MSB-07272",
+    "MSB-07311",
+    "MSB-07342",
+    "MSB-07520",
+    "MSB-07578",
+    "MSB-07631",
+    "MSB-07636",
+    "MSB-07662",
+    "MSB-07686",
+    "MSB-07700",
+    "MSB-07727",
+    "MSB-07864",
+    "MSB-07873",
+    "MSB-07945",
+    "MSB-08242",
+    "MSB-08249",
+    "MSB-08267",
+    "MSB-08354",
+    "MSB-08454",
+    "MSB-08476",
+    "MSB-08583",
+    "MSB-08777",
+    "MSB-08789",
+    "MSB-08841",
+    "MSB-08867",
+    "MSB-08928",
+    "MSB-08964",
+    "MSB-09027",
+    "MSB-09117",
+    "MSB-09518",
+    "MSB-09521",
+    "MSB-09560",
+    "MSB-09604",
+    "MSB-09710",
+    "MSB-09794",
+    "MSB-09880",
+    "MSB-09960",
+    "MSB-09977"
+  ]
+}
