@@ -196,6 +196,19 @@ the rule with `Remove-NetFirewallRule -DisplayName "Lung CT GUI"`.
 Notes: on a local network the connection is plain HTTP, so the access code and images are not encrypted. Use trusted
 networks only. For people outside your network, deploy on a server with HTTPS instead of opening your laptop to the internet.
 
+### Deploy to Render (public link, free plan)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mfrendy-maker/Lung-Cancer-Imaging-Analysis)
+
+1. Click the button above (or in Render choose **New > Blueprint** and select this repository). Sign in with GitHub.
+2. Render reads `render.yaml` and the `Dockerfile`. Keep the plan on **Free** and press **Apply**. The first build takes several minutes.
+3. When the service shows **Live**, open its `https://<name>.onrender.com` address.
+4. The access code was generated for you: open the service, go to **Environment**, and copy the value of `LUNG_GUI_TOKEN`. Share the link and the code with your users.
+
+The deployment runs in demo mode (uploads are never saved), limits uploads to 10 MB, and checks health at `/healthz`.
+The free plan sleeps when idle (the first visit afterwards takes up to a minute) and has little memory, so large 3D NIfTI
+volumes may fail; single-slice images work best. Only use sample or anonymised images on a public host.
+
 ### Saving the result as a PDF
 
 Result pages have a **Save as PDF / Print** button. In the browser print window choose "Save as PDF". The print
