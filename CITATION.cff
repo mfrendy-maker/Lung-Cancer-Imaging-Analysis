@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below, and also cite the CMB-LCA dataset."
+type: software
+title: "Lung Cancer Imaging Analysis"
+abstract: >-
+  Lung cancer CT analysis on the TCIA CMB-LCA collection: patient-matched cohort analysis,
+  lesion detection, severity grading, abnormality classification and annotated image output.
+  Research use only; not for clinical diagnosis.
+authors:
+  - family-names: Setyawan
+    given-names: Muhamad Frendy
+version: 0.1.0
+date-released: 2026-11-02
+license: MIT
+repository-code: "https://github.com/mfrendy-maker/Lung-Cancer-Imaging-Analysis"
+keywords:
+  - lung cancer
+  - computed tomography
+  - medical imaging
+  - lesion detection
+  - The Cancer Imaging Archive
+references:
+  - type: dataset
+    title: "Cancer Moonshot Biobank - Lung Cancer Collection (CMB-LCA)"
+    authors:
+      - name: "Cancer Moonshot Biobank"
+    year: 2022
+    version: "12"
+    publisher:
+      name: "The Cancer Imaging Archive"
+    doi: 10.7937/3cx3-s132
+    url: "https://doi.org/10.7937/3cx3-s132"
+    license: CC-BY-4.0

@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "lung-cancer-imaging-analysis"
 version = "0.1.0"
 description = "Patient-matched lung cancer CT analysis on TCIA CMB-LCA: similarity, clustering, longitudinal change, lesion detection, severity grading."
-authors = [{name = "Muhamad Frendy"}]
+authors = [{name = "Muhamad Frendy Setyawan"}]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
