@@ -81,6 +81,33 @@ Synthetic volume (a 14 mm solid sphere in simulated lung), not patient data:
 
 ![Sample lesion overlay](docs/sample_overlay.png)
 
+### Accessing the GUI
+
+`http://127.0.0.1:8005/` is a loopback address, so it only works on the machine running the server.
+
+| Who | How |
+|---|---|
+| Same computer | Open `http://127.0.0.1:8005/` in a browser. |
+| Same network | The server currently binds to `127.0.0.1` only. Change `HOST` in `lung_gui.py` to `0.0.0.0`, allow port 8005 in the firewall, then use `http://<server-ip>:8005/`. |
+| Internet | Use a tunnel (temporary URL, only while the machine is on) or deploy to a server. Add access control and a smaller upload limit first, because anyone with the link could upload images. |
+
+Browser or Python both work, since the server speaks plain HTTP. From Python:
+
+```python
+import requests
+
+with open("chest.png", "rb") as f:
+    r = requests.post(
+        "http://127.0.0.1:8005/analyse",   # use the LAN or public address for remote users
+        files={"image": ("chest.png", f, "image/png")},
+        data={"spacing": "0.7"},           # add "training_consent": "yes" only with the uploader's consent
+        timeout=120,
+    )
+open("result.html", "w", encoding="utf-8").write(r.text)
+```
+
+The response is an HTML page, not JSON. A JSON API endpoint is not implemented yet.
+
 ## Limitations
 
 - Detection and severity use fixed thresholds, not a trained model. CMB-LCA has little voxel-level
