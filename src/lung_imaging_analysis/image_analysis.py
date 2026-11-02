@@ -148,22 +148,23 @@ def render_overlay(gray: np.ndarray, items, caption: str = "") -> bytes:
         draw.text((tx + 4, ty + 2), tag, fill=(0, 0, 0), font=font)
 
     panel = 320
-    canvas = Image.new("RGB", (img.width + panel, img.height), (17, 24, 39))
+    canvas = Image.new("RGB", (img.width + panel, img.height), (255, 255, 255))
     canvas.paste(img, (0, 0))
     d = ImageDraw.Draw(canvas)
     big, small = _font(20), _font(15)
     x0, y = img.width + 18, 18
-    d.text((x0, y), "Suspected lesion severity", fill=(240, 244, 250), font=big)
+    d.text((x0, y), "Severity guide", fill=(0, 0, 0), font=big)
     y += 40
     for name, rule in LEGEND:
         d.rectangle([x0, y, x0 + 26, y + 26], fill=SEVERITY_COLORS[name])
-        d.text((x0 + 38, y + 2), f"{name.upper()}  {rule}", fill=(226, 232, 240), font=small)
+        d.text((x0 + 38, y + 2), f"{name.capitalize()}  {rule}", fill=(0, 0, 0), font=small)
         y += 38
-    d.text((x0, y + 4), "+1 level if irregular or part-solid", fill=(148, 163, 184), font=small)
-    y += 40
-    d.text((x0, y), f"Marked regions: {len(items)}", fill=(240, 244, 250), font=big)
+    d.text((x0, y + 4), "One level higher if irregular", fill=(51, 51, 51), font=small)
+    d.text((x0, y + 24), "or part-solid", fill=(51, 51, 51), font=small)
+    y += 64
+    d.text((x0, y), f"Areas marked: {len(items)}", fill=(0, 0, 0), font=big)
     if caption:
-        d.text((x0, y + 36), caption, fill=(148, 163, 184), font=small)
+        d.text((x0, y + 36), caption, fill=(51, 51, 51), font=small)
     out = io.BytesIO()
     canvas.save(out, format="PNG")
     return out.getvalue()
