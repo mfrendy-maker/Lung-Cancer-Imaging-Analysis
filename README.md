@@ -7,7 +7,7 @@ structure of [AML-Imaging-Analysis](https://github.com/mfrendy-maker/AML-Imaging
 biomarkers, CT upload demo) and adds CT lesion detection, severity grading and
 abnormality classification.
 
-Research use only. Not for clinical diagnosis.
+Research use only. Not for clinical diagnosis. Feel free to use!
 
 ## Data citation and usage
 
