@@ -196,30 +196,6 @@ the rule with `Remove-NetFirewallRule -DisplayName "Lung CT GUI"`.
 Notes: on a local network the connection is plain HTTP, so the access code and images are not encrypted. Use trusted
 networks only. For people outside your network, deploy on a server with HTTPS instead of opening your laptop to the internet.
 
-### Deploy to Hugging Face Spaces (public link, free CPU plan)
-
-The files for a Docker Space are in [deploy/huggingface](deploy/huggingface) (a `README.md` with the Space settings and a
-`Dockerfile` that installs this repository from GitHub).
-
-1. Create a free account at huggingface.co and open **New Space** (https://huggingface.co/new-space).
-2. Name it, choose **Docker** as the SDK (blank template), keep the free **CPU basic** hardware, and set visibility
-   (Public gives a link anyone can open; the access code still protects the tool).
-3. Upload the two files from `deploy/huggingface` to the Space (**Files > Add file > Upload files**), replacing any
-   generated `README.md`/`Dockerfile`.
-4. Open **Settings > Variables and secrets > New secret**, add `LUNG_GUI_TOKEN` with a long random value. Do this before
-   the first start: the app refuses to listen publicly without an access code.
-5. The Space builds automatically (a few minutes). When it shows **Running**, open its page
-   (`https://<user>-<space-name>.hf.space`) and sign in with the access code.
-
-Demo mode is on (uploads are never saved) and uploads are limited to 10 MB. Free Spaces sleep after inactivity and have
-limited memory, so large 3D NIfTI volumes may fail; single-slice images work best. Use sample or anonymised images only.
-To pick up new code from GitHub, use **Settings > Factory rebuild** on the Space.
-
-### Deploy to Render (alternative)
-
-`render.yaml` and the root `Dockerfile` also work on Render, but Render asks for a payment card even for its free plan.
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mfrendy-maker/Lung-Cancer-Imaging-Analysis)
 
 ### Saving the result as a PDF
 
