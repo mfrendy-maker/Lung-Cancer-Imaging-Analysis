@@ -135,6 +135,67 @@ open("result.html", "w", encoding="utf-8").write(r.text)
 
 The response is an HTML page, not JSON. A JSON API endpoint is not implemented yet.
 
+### Step by step: opening the GUI from another computer
+
+There are two ways. **Option A** needs nothing from the original laptop and works anywhere. **Option B** lets people on
+the same network use the original laptop's copy.
+
+#### Option A: run your own copy (recommended)
+
+1. Install **Python 3.10 to 3.12** from python.org and **Git** from git-scm.com.
+2. Open a terminal (PowerShell on Windows, Terminal on macOS or Linux) and download the project:
+   ```
+   git clone https://github.com/mfrendy-maker/Lung-Cancer-Imaging-Analysis.git
+   cd Lung-Cancer-Imaging-Analysis
+   ```
+3. Create an isolated environment and install the tool:
+   ```
+   python -m venv .venv
+   .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
+   python -m pip install --upgrade pip
+   python -m pip install .
+   ```
+4. Start the GUI:
+   ```
+   lung-gui
+   ```
+   (If the `lung-gui` command is not found, run `python -m lung_imaging_analysis.lung_gui`.)
+5. Open **http://127.0.0.1:8005/** in a web browser on that same computer.
+6. Click the box to choose a CT image (PNG, JPG, TIFF, BMP, or NIfTI), check the pixel size, and press **Analyse image**.
+7. Use **Save as PDF / Print** on the result page to keep a copy. Press `Ctrl+C` in the terminal to stop the server.
+
+Your images stay on your own computer. To use a different port: `set GUI_PORT=9000` (PowerShell: `$env:GUI_PORT="9000"`) before step 4.
+
+#### Option B: use the original laptop over the same network
+
+On the **laptop that hosts the GUI** (in PowerShell, from the project folder with the environment activated):
+
+1. Find its address: run `ipconfig` and note the **IPv4 Address** of the Wi-Fi or Ethernet adapter, for example `192.168.1.25`.
+2. Choose an access code and start the server (it refuses to listen on the network without one):
+   ```
+   $env:LUNG_GUI_TOKEN = "choose-a-long-random-code"
+   $env:LUNG_GUI_DEMO  = "1"          # optional: never save uploaded images
+   $env:LUNG_GUI_HOST  = "0.0.0.0"
+   python -m lung_imaging_analysis.lung_gui
+   ```
+3. Allow the port through Windows Firewall (run PowerShell **as Administrator** once):
+   ```
+   New-NetFirewallRule -DisplayName "Lung CT GUI" -Direction Inbound -Protocol TCP -LocalPort 8005 -Action Allow -Profile Private
+   ```
+4. Keep the laptop switched on, awake and on that network while others use it.
+
+On **each other computer, phone or tablet** (same Wi-Fi or office network):
+
+5. Open a browser and go to `http://<laptop-address>:8005/`, for example `http://192.168.1.25:8005/`.
+6. Enter the access code you were given, then upload an image and press **Analyse image**.
+
+If the page does not open: confirm both devices are on the same network (guest Wi-Fi often blocks device-to-device
+traffic), re-check the IPv4 address, and check the firewall rule. When finished, press `Ctrl+C` on the laptop and remove
+the rule with `Remove-NetFirewallRule -DisplayName "Lung CT GUI"`.
+
+Notes: on a local network the connection is plain HTTP, so the access code and images are not encrypted. Use trusted
+networks only. For people outside your network, deploy on a server with HTTPS instead of opening your laptop to the internet.
+
 ### Saving the result as a PDF
 
 Result pages have a **Save as PDF / Print** button. In the browser print window choose "Save as PDF". The print
