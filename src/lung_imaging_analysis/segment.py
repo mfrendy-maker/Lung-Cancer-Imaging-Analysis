@@ -21,9 +21,9 @@ def threshold_lung_mask(hu: np.ndarray) -> np.ndarray:
     labels, n = ndi.label(air)
     if n == 0:
         return np.zeros_like(air)
+    # Only in-plane faces count as "outside": chest lungs normally run through the first and last slices.
     border = set(np.unique(np.concatenate([
         labels[0].ravel(), labels[-1].ravel(), labels[:, 0].ravel(), labels[:, -1].ravel(),
-        labels[:, :, 0].ravel(), labels[:, :, -1].ravel(),
     ])))
     sizes = ndi.sum(air, labels, index=range(1, n + 1))
     keep = [i + 1 for i in np.argsort(sizes)[::-1] if (i + 1) not in border][:2]

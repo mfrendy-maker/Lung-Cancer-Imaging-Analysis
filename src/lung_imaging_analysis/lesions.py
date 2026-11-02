@@ -51,6 +51,19 @@ def _sphericity(mask: np.ndarray, spacing) -> float:
         return 1.0
 
 
+MAX_NODULE_HU = 150.0
+MAX_ELONGATION = 3.0
+
+
+def _elongation(mask: np.ndarray, spacing) -> float:
+    """sqrt of the ratio between the largest and smallest principal variance; ~1 for blobs, large for tubes."""
+    coords = np.argwhere(mask) * np.asarray(spacing, dtype=np.float64)
+    if len(coords) < 20:
+        return 1.0
+    eig = np.linalg.eigvalsh(np.cov(coords.T))
+    return float(np.sqrt(eig[-1] / max(eig[0], 1e-6)))
+
+
 def detect_lesions(hu: np.ndarray, lung: np.ndarray, spacing, min_diam_mm: float = 4.0):
     """hu: CT array (HU), lung: bool mask, spacing: voxel size (mm) in array axis order."""
     inner = ndi.binary_erosion(lung, iterations=2)
@@ -64,17 +77,22 @@ def detect_lesions(hu: np.ndarray, lung: np.ndarray, spacing, min_diam_mm: float
     voxel_vol = float(np.prod(spacing))
     lesions = []
     kept = np.zeros_like(labels)
-    for i in range(1, n + 1):
-        m = labels == i
+    for i, box in enumerate(ndi.find_objects(labels), 1):
+        if box is None:
+            continue
+        m = labels[box] == i
         vol = m.sum() * voxel_vol
         d = 2 * (3 * vol / (4 * np.pi)) ** (1 / 3)
         if d < min_diam_mm:
             continue
-        kept[m] = i
-        mean_hu = float(hu[m].mean())
-        sph = _sphericity(m, spacing)
+        mean_hu = float(hu[box][m].mean())
+        # Contrast-filled vessels and calcifications are much denser than soft-tissue nodules.
+        if mean_hu > MAX_NODULE_HU or _elongation(m, spacing) > MAX_ELONGATION:
+            continue
+        kept[box][m] = i
+        sph = _sphericity(np.pad(m, 1), spacing)
         kind = _kind(d, mean_hu, sph)
-        c = tuple(int(x) for x in ndi.center_of_mass(m))
+        c = tuple(int(x + box[a].start) for a, x in enumerate(ndi.center_of_mass(m)))
         lesions.append(Lesion(i, c, round(vol, 1), round(d, 1), round(mean_hu, 1), round(sph, 2), kind, _severity(d, kind, sph)))
     return lesions, kept
 

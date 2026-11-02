@@ -46,6 +46,15 @@ def test_thin_vessel_is_not_a_lesion():
     assert found == []
 
 
+def test_threshold_lung_mask_keeps_lungs_that_run_to_the_scan_edges():
+    hu = np.full((60, 60, 40), -1000.0, dtype=np.float32)
+    hu[10:50, 10:50, :] = 40.0
+    hu[20:40, 20:40, :] = -800.0
+    mask = segment.threshold_lung_mask(hu)
+    assert mask[30, 30, 0] and mask[30, 30, 39]
+    assert not mask[0, 0, 20]
+
+
 def test_threshold_lung_mask_finds_enclosed_air():
     hu = np.full((60, 60, 60), -1000.0, dtype=np.float32)
     hu[10:50, 10:50, 10:50] = 40.0

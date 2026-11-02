@@ -88,7 +88,7 @@ Synthetic volume (a 14 mm solid sphere in simulated lung), not patient data:
 | Who | How |
 |---|---|
 | Same computer | Open `http://127.0.0.1:8005/` in a browser. |
-| Same network | The server currently binds to `127.0.0.1` only. Change `HOST` in `lung_gui.py` to `0.0.0.0`, allow port 8005 in the firewall, then use `http://<server-ip>:8005/`. |
+| Same network | The server binds to `127.0.0.1` only by default. Set `LUNG_GUI_HOST=0.0.0.0` and `LUNG_GUI_TOKEN` (required for non-local addresses), allow port 8005 in the firewall, then use `http://<server-ip>:8005/`. |
 | Internet | Use a tunnel (temporary URL, only while the machine is on) or deploy to a server. Add access control and a smaller upload limit first, because anyone with the link could upload images. |
 
 Browser or Python both work, since the server speaks plain HTTP. From Python:
@@ -147,7 +147,12 @@ a security review.
   tumour annotation, so sensitivity and false-positive rates are not measured. A labelled collection
   (for example LIDC-IDRI nodule annotations or NSCLC-Radiomics contours) is needed to validate or
   train a classifier.
-- The browser upload demo still reports 2D image statistics only; it does not run the 3D lesion pipeline.
+- The older `lung-ct-demo` page (port 8003) only reports 2D image statistics. Use `lung-gui` for lesion marking.
+- Real-scan check (one CMB-LCA CT series, patient MSB-04096, no ground truth): the 3D pipeline first marked 54
+  candidates. Visual review showed contrast-filled vessels, so candidates denser than 150 HU or tube-shaped are now
+  rejected, leaving 22 candidates in about 40 seconds. Spot checks of two of the remainder showed a pleural/mediastinal
+  interface and a vessel branch point, so expect many false positives. Treat every mark as a candidate to review,
+  not a finding. Note that this series is a coronal-style reformat, so the "axial slice" caption can be misleading.
 
 ### Result guidance
 
