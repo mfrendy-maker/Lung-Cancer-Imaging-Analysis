@@ -88,3 +88,7 @@ Synthetic volume (a 14 mm solid sphere in simulated lung), not patient data:
   (for example LIDC-IDRI nodule annotations or NSCLC-Radiomics contours) is needed to validate or
   train a classifier.
 - The browser upload demo still reports 2D image statistics only; it does not run the 3D lesion pipeline.
+
+### Result guidance
+
+Result pages include general educational information: possible explanations for the marked appearance, suggested next steps scaled to severity, notes on how medicines are chosen (no doses, not a prescription), personal care and activity advice, warning signs for urgent care, and a schematic normal chest CT for comparison. This content is generic (see `clinical_info.py`), is not personalised, and is not medical advice.

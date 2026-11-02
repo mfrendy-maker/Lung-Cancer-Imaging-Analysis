@@ -11,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
-from . import image_analysis
+from . import clinical_info, image_analysis
 from .ct_upload_demo import _parse_multipart_form, _safe_name
 
 HOST = "127.0.0.1"
@@ -70,6 +70,9 @@ th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;le
 .muted{color:var(--muted);font-size:14px}
 footer{color:var(--muted);font-size:13px;text-align:center;padding:0 24px 32px}
 a{color:var(--blue)}
+ul{margin:8px 0 0;padding-left:22px}li{margin-bottom:6px}
+.urgent{background:#fdecea;border:1px solid #e5a29b;border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:14px;color:#000}
+.urgent ul{margin:6px 0 0}
 @media print{header,.btn,footer{display:none}body{background:#fff}.card{box-shadow:none}}
 """
 
@@ -136,6 +139,16 @@ def _badge(severity: str, large: bool = False) -> str:
     return f'<span class="{cls}" style="background:rgb({r},{g},{b});color:{text}">{severity.upper()}</span>'
 
 
+def _normal_reference() -> bytes:
+    global _NORMAL_PNG
+    if _NORMAL_PNG is None:
+        _NORMAL_PNG = image_analysis.normal_reference_png()
+    return _NORMAL_PNG
+
+
+_NORMAL_PNG: bytes | None = None
+
+
 def _headline(result: dict) -> tuple[str, str]:
     findings = result["findings"]
     if not findings:
@@ -184,6 +197,13 @@ def render_result(filename: str, result: dict, retained_ref: str | None = None) 
         for name, rule in image_analysis.LEGEND
     )
     headline, detail = _headline(result)
+    info = clinical_info.guidance_for(result)
+    causes = "".join(f"<li><b>{html.escape(n)}.</b> {html.escape(t)}</li>" for n, t in info["causes"])
+    steps = "".join(f"<li>{html.escape(t)}</li>" for t in info["next_steps"])
+    meds = "".join(f"<li>{html.escape(t)}</li>" for t in info["medications"])
+    care = "".join(f"<li>{html.escape(t)}</li>" for t in info["personal_care"])
+    urgent = "".join(f"<li>{html.escape(t)}</li>" for t in info["urgent"])
+    normal_img = base64.b64encode(_normal_reference()).decode("ascii")
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Analysis result</title>
 <style>{CSS}</style></head><body>
@@ -200,9 +220,27 @@ The label beside each outline gives its number, approximate size and rating.</p>
 <table><tr><th>No.</th><th>Rating</th><th>Appearance</th><th>Approx. size</th><th>Density (HU)</th><th>Position (x, y)</th></tr>{rows}</table>
 <ul class="muted">{notes}</ul></div>
 
+<div class="card"><h2>Possible explanations</h2>
+<p class="lead">General information about what areas like these can represent. Only a clinician, using your history, examination and further tests, can make a diagnosis.</p>
+<ul>{causes}</ul></div>
+
+<div class="card"><h2>Suggested next steps</h2><ul>{steps}</ul></div>
+
+<div class="card"><h2>About medicines</h2>
+<p class="lead">General education only. This is not a prescription and no doses are suggested.</p>
+<ul>{meds}</ul></div>
+
+<div class="card"><h2>Personal care and recommended activity</h2><ul>{care}</ul></div>
+
+<div class="urgent"><b>Seek urgent medical care if you have:</b><ul>{urgent}</ul></div>
+
 <div class="card"><h2>How to read these ratings</h2>
 <p class="lead">Ratings reflect size and shape only. An irregular outline or a part-solid appearance raises the rating by one level.</p>
 <div class="guide">{guide}</div></div>
+
+<div class="card"><h2>For comparison: a typical normal chest CT</h2>
+<p class="lead">In a healthy chest the lungs appear evenly dark, with thin branching blood vessels and no isolated bright round spots. This is a schematic illustration, not a patient scan. The tool looks for areas that stand out from this normal pattern.</p>
+<img class="result" style="max-width:520px" alt="Schematic of a normal chest CT" src="data:image/png;base64,{normal_img}"></div>
 
 <div class="card"><h2>Your data</h2><p class="muted" style="margin:0">{storage}</p></div>
 

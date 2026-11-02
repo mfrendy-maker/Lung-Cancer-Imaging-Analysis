@@ -170,6 +170,69 @@ def render_overlay(gray: np.ndarray, items, caption: str = "") -> bytes:
     return out.getvalue()
 
 
+def normal_reference_array(size: int = 384) -> np.ndarray:
+    """Schematic normal axial chest CT in a lung window (not a real patient scan)."""
+    rng = np.random.default_rng(7)
+    y, x = np.mgrid[:size, :size].astype(np.float32)
+    c = size / 2
+
+    def ell(cx, cy, a, b):
+        return ((x - cx) / a) ** 2 + ((y - cy) / b) ** 2 <= 1
+
+    img = np.zeros((size, size), np.float32)
+    img[ell(c, c * 1.02, size * 0.46, size * 0.36)] = 105          # subcutaneous fat
+    img[ell(c, c * 1.02, size * 0.42, size * 0.32)] = 150          # chest wall muscle
+    lungs = ell(c - size * 0.2, c * 0.98, size * 0.17, size * 0.25) | ell(c + size * 0.2, c * 0.98, size * 0.17, size * 0.25)
+    img[lungs] = 38                                               # aerated lung
+    img[ell(c, c * 1.0, size * 0.065, size * 0.2)] = 150          # mediastinum
+    img[ell(c + size * 0.04, c * 0.9, size * 0.1, size * 0.1)] = 165    # heart
+    img[ell(c + size * 0.045, c * 1.3, size * 0.03, size * 0.03)] = 185  # descending aorta
+    img[ell(c, c * 1.36, size * 0.04, size * 0.04)] = 215         # vertebra
+    for sx in (-1, 1):                                            # ribs
+        for k in range(5):
+            ang = np.deg2rad(-50 + k * 28)
+            rx, ry = c + sx * size * 0.37 * np.cos(ang), c + size * 0.3 * np.sin(ang)
+            img[ell(rx, ry, size * 0.022, size * 0.012)] = 205
+    for sx in (-1, 1):                                            # branching vessels
+        for _ in range(9):
+            px, py = c + sx * size * 0.06, c * 0.95
+            ang = rng.uniform(-1.2, 1.2) + (np.pi if sx < 0 else 0)
+            for step in range(int(size * 0.13)):
+                px += np.cos(ang) * 1.5
+                py += np.sin(ang) * 1.5
+                ang += rng.normal(0, 0.09)
+                ix, iy = int(px), int(py)
+                if 0 <= ix < size and 0 <= iy < size and lungs[iy, ix]:
+                    width = 2 if step < size * 0.07 else 1
+                    img[iy - width + 1:iy + width, ix - width + 1:ix + width] = 125
+    img = ndi.gaussian_filter(img, 1.2)
+    img[lungs] += rng.normal(0, 5, int(lungs.sum()))
+    return np.clip(img, 0, 255).astype(np.uint8)
+
+
+def normal_reference_png() -> bytes:
+    """Labelled figure of a typical normal chest CT for comparison with the analysed image."""
+    arr = normal_reference_array()
+    s = 2
+    base = Image.fromarray(np.repeat(np.repeat(arr, s, axis=0), s, axis=1)).convert("RGB")
+    size = base.width
+    top = 46
+    canvas = Image.new("RGB", (size, size + top), (255, 255, 255))
+    canvas.paste(base, (0, top))
+    d = ImageDraw.Draw(canvas)
+    title, small = _font(18), _font(14)
+    d.text((10, 10), "Typical normal chest CT (schematic illustration)", fill=(0, 0, 0), font=title)
+    labels = [("Right lung", 0.1, 0.5), ("Left lung", 0.7, 0.5), ("Heart", 0.47, 0.42), ("Aorta", 0.58, 0.66), ("Spine", 0.37, 0.70)]
+    for text, fx, fy in labels:
+        px, py = int(fx * size), int(fy * size) + top
+        box = d.textbbox((px, py), text, font=small)
+        d.rectangle([box[0] - 3, box[1] - 2, box[2] + 3, box[3] + 2], fill=(255, 255, 255))
+        d.text((px, py), text, fill=(0, 0, 0), font=small)
+    out = io.BytesIO()
+    canvas.save(out, format="PNG")
+    return out.getvalue()
+
+
 def _summary(findings: list[Finding]) -> dict:
     if not findings:
         return {"label": "no suspicious regions found", "severity": "none", "dominant_finding": None}
