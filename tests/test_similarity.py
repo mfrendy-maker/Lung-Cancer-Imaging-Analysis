@@ -23,7 +23,16 @@ def test_build_patient_similarity_matrix():
     assert similarity.iloc[0, 1] <= 1.0
 
 
-def test_fetch_collection_snapshot_returns_expected_fields():
+def test_fetch_collection_snapshot_returns_expected_fields(monkeypatch):
+    def fake_fetch(url):
+        if "getPatient" in url:
+            return [{"PatientId": "P1"}, {"PatientId": "P2"}]
+        return [
+            {"PatientID": "P1", "StudyInstanceUID": "s1", "Modality": "CT", "ImageCount": 100},
+            {"PatientID": "P2", "StudyInstanceUID": "s2", "Modality": "CT", "ImageCount": 120},
+        ]
+
+    monkeypatch.setattr("lung_imaging_analysis.data_fetcher._fetch_json", fake_fetch)
     snapshot = fetch_collection_snapshot(collection_name="CMB-LCA")
 
     assert "collection" in snapshot

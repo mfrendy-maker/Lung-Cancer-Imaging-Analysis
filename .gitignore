@@ -19,3 +19,5 @@ outputs/
 junit.xml
 pytest_out.txt
 *.log
+data/nifti/
+run_out.txt

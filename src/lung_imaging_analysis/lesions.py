@@ -55,8 +55,11 @@ def detect_lesions(hu: np.ndarray, lung: np.ndarray, spacing, min_diam_mm: float
     """hu: CT array (HU), lung: bool mask, spacing: voxel size (mm) in array axis order."""
     inner = ndi.binary_erosion(lung, iterations=2)
     candidates = inner & (hu > -400)
-    # Opening removes thin vessels/airway walls, keeping compact lesions.
-    candidates = ndi.binary_opening(candidates, structure=ndi.generate_binary_structure(3, 1), iterations=2)
+    # Spherical opening (~2.5 mm radius) removes vessels and airway walls thinner than the ball.
+    r = [max(1, int(round(2.5 / s))) for s in spacing]
+    grid = np.ogrid[tuple(slice(-k, k + 1) for k in r)]
+    ball = sum((g / k) ** 2 for g, k in zip(grid, r)) <= 1
+    candidates = ndi.binary_opening(candidates, structure=ball)
     labels, n = ndi.label(candidates)
     voxel_vol = float(np.prod(spacing))
     lesions = []
