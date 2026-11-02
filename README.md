@@ -108,6 +108,39 @@ open("result.html", "w", encoding="utf-8").write(r.text)
 
 The response is an HTML page, not JSON. A JSON API endpoint is not implemented yet.
 
+### Saving the result as a PDF
+
+Result pages have a **Save as PDF / Print** button. In the browser print window choose "Save as PDF". The print
+layout drops the buttons, keeps colours, avoids splitting cards across pages and stamps the report with its UTC time.
+
+### Running it for other people (security settings)
+
+The GUI is safe for localhost by default. Before exposing it to a network or the internet, set these environment
+variables (all optional unless noted):
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `LUNG_GUI_HOST` | Address to listen on. Anything other than localhost **refuses to start without a token**. | `127.0.0.1` |
+| `LUNG_GUI_TOKEN` | Shared access code. Visitors sign in once (HttpOnly, SameSite=Strict cookie); wrong codes are rate limited. | none (open) |
+| `LUNG_GUI_DEMO` | `1` = never save uploads and hide the consent option. | off |
+| `LUNG_GUI_MAX_MB` | Largest accepted upload. | `50` |
+| `LUNG_GUI_MAX_STORE_MB` | Cap on total consented uploads kept on disk. | `500` |
+| `LUNG_GUI_RATE` | Analyses per minute per client. | `10` |
+| `LUNG_GUI_TRUST_PROXY` | `1` = use `X-Forwarded-For` for the client address (only behind a trusted proxy or tunnel). | off |
+| `GUI_PORT` | Port. | `8005` |
+
+Example for a public demo:
+
+```
+$env:LUNG_GUI_TOKEN = "<long random code>"; $env:LUNG_GUI_DEMO = "1"; $env:LUNG_GUI_HOST = "0.0.0.0"
+python -m lung_imaging_analysis.lung_gui
+```
+
+Responses carry no-store caching, a strict Content-Security-Policy and clickjacking protection, request size is checked
+before the body is read, and at most two analyses run at once. Still use HTTPS (a reverse proxy or tunnel), keep demo
+mode on unless you have a data-handling plan, and only allow anonymised or sample images. This is not a substitute for
+a security review.
+
 ## Limitations
 
 - Detection and severity use fixed thresholds, not a trained model. CMB-LCA has little voxel-level

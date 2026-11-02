@@ -5,16 +5,18 @@ import base64
 import html
 import json
 import os
+import re
+import threading
 import time
 import uuid
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
-from . import clinical_info, image_analysis
+from . import clinical_info, image_analysis, security
 from .ct_upload_demo import _parse_multipart_form, _safe_name
 
-HOST = "127.0.0.1"
+HOST = os.environ.get("LUNG_GUI_HOST", "127.0.0.1")
 PORT = int(os.environ.get("GUI_PORT", "8005"))
 TRAINING_DIR = Path(__file__).resolve().parents[2] / "data" / "training_uploads"
 CONSENT_VERSION = "2026-11-v1"
@@ -73,7 +75,21 @@ a{color:var(--blue)}
 ul{margin:8px 0 0;padding-left:22px}li{margin-bottom:6px}
 .urgent{background:#fdecea;border:1px solid #e5a29b;border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:14px;color:#000}
 .urgent ul{margin:6px 0 0}
-@media print{header,.btn,footer{display:none}body{background:#fff}.card{box-shadow:none}}
+@page{size:A4;margin:14mm}
+.toolbar{display:flex;gap:12px;margin-bottom:18px}
+.btn.secondary,button.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+.btn.secondary:hover,button.secondary:hover{background:#e8f4f8}
+input[type=password]{border:1px solid #b8c6d4;border-radius:6px;padding:9px 10px;width:100%;max-width:360px;font-size:15px}
+@media print{
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.btn,.noprint{display:none!important}
+body{font-size:12px}
+main{padding:12px 0}
+.card,.urgent,.notice{break-inside:avoid}
+h2{break-after:avoid}
+img.result{max-width:100%;break-inside:avoid}
+footer{padding-bottom:0}
+}
 """
 
 PAGE = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -165,7 +181,9 @@ def _headline(result: dict) -> tuple[str, str]:
 
 def store_training_upload(filename: str, data: bytes, spacing: float, form: dict) -> str | None:
     """Save the upload with a consent record, only if the user explicitly opted in. Returns a reference id."""
-    if form.get("training_consent") != "yes":
+    if form.get("training_consent") != "yes" or security.demo_mode():
+        return None
+    if security.dir_size(TRAINING_DIR) + len(data) > security.max_store_bytes():
         return None
     ref = f"{int(time.time())}_{uuid.uuid4().hex[:8]}"
     TRAINING_DIR.mkdir(parents=True, exist_ok=True)
@@ -207,8 +225,11 @@ def render_result(filename: str, result: dict, retained_ref: str | None = None) 
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Analysis result</title>
 <style>{CSS}</style></head><body>
-<header><div class="wrap"><h1>Lung CT Lesion Analysis</h1><p>Result for {html.escape(filename)}</p></div></header>
+<header><div class="wrap"><h1>Lung CT Lesion Analysis</h1><p>Result for {html.escape(filename)} &middot; Report generated {time.strftime('%d %b %Y %H:%M', time.gmtime())} UTC</p></div></header>
 <main><div class="wrap">
+<div class="toolbar noprint"><button type="button" onclick="window.print()">Save as PDF / Print</button>
+<a class="btn secondary" href="/">Analyse another image</a></div>
+<p class="muted noprint" style="margin-top:-6px">In the print window, choose &ldquo;Save as PDF&rdquo; as the destination.</p>
 <div class="card summary"><div class="big">{_badge(result['severity'], True)}</div>
 <div><p class="headline">{headline}</p><p class="muted">{detail}</p></div></div>
 
@@ -246,7 +267,8 @@ The label beside each outline gives its number, approximate size and rating.</p>
 
 <div class="notice"><b>Important.</b> These are candidate areas only, not a diagnosis. Normal structures such as blood vessels, bone or
 calcification can be marked by mistake, and real lesions can be missed. Please discuss your scan with a radiologist or physician.</div>
-<p style="margin-top:22px"><a class="btn" href="/">Analyse another image</a></p>
+<p style="margin-top:22px" class="noprint"><button type="button" onclick="window.print()">Save as PDF / Print</button>
+<a class="btn secondary" href="/">Analyse another image</a></p>
 </div></main><footer>For research and education only.</footer></body></html>"""
 
 
@@ -258,28 +280,111 @@ def _error_page(message: str) -> str:
             f'<p class="muted">{html.escape(message)}</p><p><a class="btn" href="/">Try again</a></p></div></div></main></body></html>')
 
 
+DEMO_STEP = ('<div class="step"><div class="n">3</div><div class="body"><b>Data use</b>'
+             '<div class="consent" style="margin-top:10px"><p style="margin:0">This is a demonstration. Uploaded images are analysed in memory and are '
+             'never saved, and no consent is requested. Please use only anonymised or sample images.</p></div></div></div>')
+
+
+def render_upload_page() -> str:
+    if not security.demo_mode():
+        return PAGE
+    return re.sub(r'<div class="step"><div class="n">3</div>.*?(?=<div style="margin-top:26px">)', DEMO_STEP + "\n\n", PAGE, flags=re.S)
+
+
+def _login_page(error: str = "") -> str:
+    msg = f'<p class="muted" style="color:#a40000">{html.escape(error)}</p>' if error else ""
+    return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+            f'<title>Sign in</title><style>{CSS}</style></head><body>'
+            f'<header><div class="wrap"><h1>Lung CT Lesion Analysis</h1><p>Access is restricted</p></div></header>'
+            f'<main><div class="wrap"><div class="card"><h2>Enter the access code</h2>'
+            f'<p class="lead">Ask the person who shared this link for the access code.</p>{msg}'
+            f'<form action="/login" method="post"><input type="password" name="token" autocomplete="current-password" required autofocus>'
+            f'<div style="margin-top:16px"><button type="submit">Continue</button></div></form></div></div></main></body></html>')
+
+
+_LIMITER = security.RateLimiter()
+_ANALYSIS_SLOTS = threading.BoundedSemaphore(2)
+
+
 class LungGUIHandler(BaseHTTPRequestHandler):
-    def _send(self, status: int, body: str) -> None:
+    timeout = 60
+
+    def _client_ip(self) -> str:
+        if security.trust_proxy():
+            forwarded = self.headers.get("X-Forwarded-For", "")
+            if forwarded:
+                return forwarded.split(",")[0].strip()
+        return self.client_address[0]
+
+    def _send(self, status: int, body: str, extra_headers: dict | None = None) -> None:
         payload = body.encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Security-Policy",
+                         "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; form-action 'self'")
+        for key, value in (extra_headers or {}).items():
+            self.send_header(key, value)
         self.end_headers()
         self.wfile.write(payload)
 
+    def _authed(self) -> bool:
+        return security.cookie_is_valid(self.headers.get("Cookie"), security.access_token())
+
     def do_GET(self):
-        if urlparse(self.path).path in ("/", "/upload"):
-            self._send(200, PAGE)
-        else:
+        if urlparse(self.path).path not in ("/", "/upload"):
             self._send(404, _error_page("That page does not exist."))
+        elif not self._authed():
+            self._send(401, _login_page())
+        else:
+            self._send(200, render_upload_page())
+
+    def _login(self) -> None:
+        if not _LIMITER.allow("login:" + self._client_ip(), 5):
+            self._send(429, _login_page("Too many attempts. Please wait a minute and try again."))
+            return
+        length = int(self.headers.get("Content-Length", "0") or 0)
+        if not 0 < length <= 2048:
+            self._send(400, _login_page("Invalid request."))
+            return
+        supplied = parse_qs(self.rfile.read(length).decode("utf-8", "replace")).get("token", [""])[0]
+        token = security.access_token()
+        if not security.token_matches(supplied, token):
+            self._send(401, _login_page("That access code is not correct."))
+            return
+        secure = "; Secure" if self.headers.get("X-Forwarded-Proto") == "https" else ""
+        cookie = f"{security.COOKIE_NAME}={security.session_value(token)}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800{secure}"
+        self.send_response(303)
+        self.send_header("Location", "/")
+        self.send_header("Set-Cookie", cookie)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def do_POST(self):
-        if urlparse(self.path).path != "/analyse":
+        path = urlparse(self.path).path
+        if path == "/login" and security.access_token():
+            self._login()
+            return
+        if path != "/analyse":
             self._send(404, _error_page("That page does not exist."))
             return
-        length = int(self.headers.get("Content-Length", "0"))
-        if length <= 0 or length > image_analysis.MAX_UPLOAD_BYTES:
-            self._send(413, _error_page("The upload is empty or too large."))
+        if not self._authed():
+            self._send(401, _login_page())
+            return
+        if not _LIMITER.allow("analyse:" + self._client_ip(), security.rate_limit_per_minute()):
+            self._send(429, _error_page("Too many requests. Please wait a minute and try again."))
+            return
+        try:
+            length = int(self.headers.get("Content-Length", "0") or 0)
+        except ValueError:
+            length = 0
+        if length <= 0 or length > security.max_upload_bytes():
+            limit_mb = security.max_upload_bytes() // security.MB
+            self._send(413, _error_page(f"The upload is empty or larger than the {limit_mb} MB limit."))
             return
         form = _parse_multipart_form(self.rfile.read(length), self.headers.get("Content-Type", ""))
         upload = form.get("image")
@@ -287,12 +392,17 @@ class LungGUIHandler(BaseHTTPRequestHandler):
             self._send(400, _error_page("No image was uploaded."))
             return
         filename, payload = upload
+        if not _ANALYSIS_SLOTS.acquire(blocking=False):
+            self._send(503, _error_page("The tool is busy with other analyses. Please try again shortly."))
+            return
         try:
             spacing = float(str(form.get("spacing") or 0.7).replace(",", "."))
             result = image_analysis.analyse_upload(_safe_name(filename), payload, spacing)
         except (ValueError, OSError) as exc:
             self._send(400, _error_page(str(exc)))
             return
+        finally:
+            _ANALYSIS_SLOTS.release()
         retained = store_training_upload(_safe_name(filename), payload, spacing, form)
         self._send(200, render_result(_safe_name(filename), result, retained))
 
@@ -301,8 +411,14 @@ class LungGUIHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = HOST, port: int = PORT) -> None:
-    server = HTTPServer((host, port), LungGUIHandler)
-    print(f"Lung CT analysis GUI running at http://{host}:{port}/")
+    problem = security.refuse_open_exposure(host)
+    if problem:
+        raise SystemExit(problem)
+    server = ThreadingHTTPServer((host, port), LungGUIHandler)
+    server.daemon_threads = True
+    mode = "demo mode (uploads never saved), " if security.demo_mode() else ""
+    auth = "access code required" if security.access_token() else "no access code"
+    print(f"Lung CT analysis GUI running at http://{host}:{port}/  [{mode}{auth}, upload limit {security.max_upload_bytes() // security.MB} MB]")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
