@@ -51,6 +51,23 @@ TotalSegmentator is a segmentation tool, not a normal-CT dataset.
 
 ## Example output
 
+## Lesion analysis GUI
+
+```
+lung-gui          # http://127.0.0.1:8005/  (set GUI_PORT to change)
+```
+
+Upload a lung CT slice (PNG, JPG, TIFF, BMP) or a NIfTI volume. Suspected lesions are filled and outlined
+in a severity colour (yellow low, orange moderate, red high, magenta critical), boxed, and labelled with
+size and severity, with a legend and a findings table. For 2D images, enter the pixel size in mm so sizes
+are meaningful. Images are processed in memory and not stored. Heuristic and unvalidated; not for diagnosis.
+
+![GUI output](docs/gui_sample.png)
+
+(Synthetic chest drawing, not patient data.)
+
+## Example output
+
 Synthetic volume (a 14 mm solid sphere in simulated lung), not patient data:
 
 ![Sample lesion overlay](docs/sample_overlay.png)

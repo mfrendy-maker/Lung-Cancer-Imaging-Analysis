@@ -76,26 +76,40 @@ def persist_collection_snapshot(snapshot: dict[str, Any], output_path: str | Pat
     return target_path
 
 
+def _pick_series(records: list[dict], max_series: int) -> list[dict]:
+    # Chest-sized volumes (100-600 slices), closest to 250 first; avoids scouts and huge whole-body series.
+    sized = [r for r in records if 100 <= int(r.get("ImageCount") or 0) <= 600]
+    return sorted(sized or records, key=lambda r: abs(int(r.get("ImageCount") or 0) - 250))[:max_series]
+
+
 def download_collection_ct(collection_name: str = "CMB-LCA", output_dir: str | Path = "data/tcia_downloads", max_series: int = 5) -> list[Path]:
-    """Download CT series (DICOM zips, extracted) from a public TCIA collection via the NBIA API."""
-    import io
+    """Download CT series from a public TCIA collection via the NBIA API, streaming each zip to disk."""
     import zipfile
 
-    series_records = _fetch_json(f"{TCIA_BASE_URL}/getSeries?Collection={collection_name}&Modality=CT")
-    # Prefer larger series: they are the full chest volumes rather than scouts.
-    series_records = sorted(series_records, key=lambda r: int(r.get("ImageCount") or 0), reverse=True)[:max_series]
+    series_records = _pick_series(_fetch_json(f"{TCIA_BASE_URL}/getSeries?Collection={collection_name}&Modality=CT"), max_series)
     out_dirs: list[Path] = []
     for record in series_records:
         uid = record["SeriesInstanceUID"]
         target = Path(output_dir) / record.get("PatientID", "unknown") / uid
         target.mkdir(parents=True, exist_ok=True)
-        response = requests.get(f"{TCIA_BASE_URL}/getImage", params={"SeriesInstanceUID": uid}, timeout=600)
-        response.raise_for_status()
-        with zipfile.ZipFile(io.BytesIO(response.content)) as archive:
+        zip_path = target / "series.zip"
+        print(f"Downloading {record.get('PatientID')} {uid} ({record.get('ImageCount')} images)", flush=True)
+        with requests.get(f"{TCIA_BASE_URL}/getImage", params={"SeriesInstanceUID": uid}, stream=True, timeout=(30, 120)) as response:
+            response.raise_for_status()
+            done = 0
+            next_report = 10 << 20
+            with zip_path.open("wb") as handle:
+                for chunk in response.iter_content(chunk_size=1 << 20):
+                    handle.write(chunk)
+                    done += len(chunk)
+                    if done >= next_report:
+                        print(f"  {done >> 20} MB", flush=True)
+                        next_report += 10 << 20
+        with zipfile.ZipFile(zip_path) as archive:
             archive.extractall(target)
+        zip_path.unlink()
         out_dirs.append(target)
     return out_dirs
-
 
 def dicom_to_nifti(dicom_dir: str | Path, out_file: str | Path) -> str:
     import SimpleITK as sitk

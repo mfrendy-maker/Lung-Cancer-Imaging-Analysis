@@ -29,6 +29,7 @@ segmentation = ["TotalSegmentator"]
 lung-imaging = "lung_imaging_analysis.cli:main"
 lung-ct-demo = "lung_imaging_analysis.ct_upload_demo:main"
 lung-lesion = "lung_imaging_analysis.lesion_cli:main"
+lung-gui = "lung_imaging_analysis.lung_gui:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
