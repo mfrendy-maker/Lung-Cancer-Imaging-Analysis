@@ -66,6 +66,15 @@ are meaningful. Images are processed in memory and not stored. Heuristic and unv
 
 (Synthetic chest drawing, not patient data.)
 
+### Consent for tool development
+
+The upload form has an optional consent checkbox, unchecked by default. Without it the image is analysed in memory and
+discarded. If ticked, the uploader confirms they are authorised to share the image and have removed identifying
+information, and agrees that it may be retained and used to develop, test and improve this tool's analysis module.
+The file is saved under `data/training_uploads/` (ignored by Git) with a `.consent.json` record (consent text, version,
+timestamp). The tool does not de-identify images or DICOM/NIfTI headers. Consent can be withdrawn by asking the
+operator to delete the file and its record.
+
 ## Example output
 
 Synthetic volume (a 14 mm solid sphere in simulated lung), not patient data:

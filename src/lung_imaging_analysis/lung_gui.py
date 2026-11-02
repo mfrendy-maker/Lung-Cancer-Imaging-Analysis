@@ -3,8 +3,12 @@ from __future__ import annotations
 
 import base64
 import html
+import json
 import os
+import time
+import uuid
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
 from urllib.parse import urlparse
 
 from . import image_analysis
@@ -12,6 +16,13 @@ from .ct_upload_demo import _parse_multipart_form, _safe_name
 
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("GUI_PORT", "8005"))
+TRAINING_DIR = Path(__file__).resolve().parents[2] / "data" / "training_uploads"
+CONSENT_VERSION = "2026-11-v1"
+CONSENT_TEXT = (
+    "I consent to my uploaded CT image being retained and used to develop, test and improve the analysis "
+    "module of this tool (for example evaluating or training lesion-detection models). I confirm I am "
+    "authorised to share this image and have removed patient-identifying information (name, ID, dates, DICOM metadata)."
+)
 
 CSS = """
 body{font-family:Segoe UI,Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:24px}
@@ -31,6 +42,10 @@ th{color:#94a3b8;font-weight:600}
 .badge{display:inline-block;padding:2px 10px;border-radius:999px;color:#000;font-weight:700;font-size:12px}
 .warn{background:#2a1d10;border:1px solid #7c4a12;color:#fbd38d;border-radius:10px;padding:12px;margin-top:18px;font-size:14px}
 a{color:#7dd3fc}
+.consent{background:#0d162b;border:1px solid #2a3f6b;border-radius:10px;padding:14px;margin-top:18px;font-size:14px}
+.consent p{color:#94a3b8;margin:10px 0 0;font-size:13px}
+label.chk{display:flex;gap:10px;align-items:flex-start;margin:0;color:#e2e8f0;text-transform:none;letter-spacing:0;font-size:14px}
+label.chk input{margin-top:4px}
 """
 
 PAGE = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -44,9 +59,13 @@ PAGE = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <input id="file" name="image" type="file" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp,.nii,.nii.gz" hidden required></div>
 <label for="spacing">Pixel size (mm per pixel, 2D images only)</label>
 <input id="spacing" name="spacing" type="number" step="0.01" min="0.05" max="5" value="0.7">
+<div class="consent"><label class="chk"><input name="training_consent" type="checkbox" value="yes"> <span>{html.escape(CONSENT_TEXT)}</span></label>
+<p>Optional and off by default. Without consent your image is analysed in memory and discarded right after the result is shown.
+With consent it is saved on the machine running this tool, together with a record of this consent, and may be used only to develop the tool.
+Contact the tool operator to withdraw consent and have the image deleted. Do not tick this for images that still contain identifying information.</p></div>
 <div><button id="go" type="submit">Analyse</button></div></form></div>
 <div class="warn">Research tool using simple image-processing heuristics. It is not validated, can miss lesions or
-mark normal structures, and must not be used for diagnosis. Images are processed in memory and not stored.</div>
+mark normal structures, and must not be used for diagnosis.</div>
 <script>
 const drop=document.getElementById('drop'),file=document.getElementById('file'),msg=document.getElementById('msg');
 drop.onclick=()=>file.click();
@@ -65,7 +84,22 @@ def _badge(severity: str) -> str:
     return f'<span class="badge" style="background:rgb({r},{g},{b})">{severity.upper()}</span>'
 
 
-def render_result(filename: str, result: dict) -> str:
+def store_training_upload(filename: str, data: bytes, spacing: float, form: dict) -> str | None:
+    """Save the upload with a consent record, only if the user explicitly opted in. Returns a reference id."""
+    if form.get("training_consent") != "yes":
+        return None
+    ref = f"{int(time.time())}_{uuid.uuid4().hex[:8]}"
+    TRAINING_DIR.mkdir(parents=True, exist_ok=True)
+    (TRAINING_DIR / f"{ref}_{filename}").write_bytes(data)
+    record = {"ref": ref, "original_name": filename, "pixel_size_mm": spacing, "consent_version": CONSENT_VERSION,
+              "consent_text": CONSENT_TEXT, "consented_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    (TRAINING_DIR / f"{ref}.consent.json").write_text(json.dumps(record, indent=2), encoding="utf-8")
+    return ref
+
+
+def render_result(filename: str, result: dict, retained_ref: str | None = None) -> str:
+    storage = (f"Retained for tool development with your consent (reference {html.escape(retained_ref)})."
+               if retained_ref else "Not retained: this image was analysed in memory and discarded.")
     imgs = "".join(
         f'<img class="result" alt="Annotated CT" src="data:image/png;base64,{base64.b64encode(p).decode("ascii")}">'
         for p in result["images"]
@@ -90,6 +124,7 @@ def render_result(filename: str, result: dict) -> str:
 <ul>{notes}</ul></div>
 <div class="warn">Suspected regions are candidates only. Colour shows size-based severity, not a confirmed diagnosis.
 Bright normal structures (vessels, bone, calcification) can be mis-marked. Consult a radiologist.</div>
+<div class="card"><b>Data use:</b> {storage}</div>
 <p><a href="/">Analyse another image</a></p></div></body></html>"""
 
 
@@ -128,12 +163,13 @@ class LungGUIHandler(BaseHTTPRequestHandler):
             return
         filename, payload = upload
         try:
-            spacing = float(form.get("spacing") or 0.7)
+            spacing = float(str(form.get("spacing") or 0.7).replace(",", "."))
             result = image_analysis.analyse_upload(_safe_name(filename), payload, spacing)
         except (ValueError, OSError) as exc:
             self._send(400, _error_page(str(exc)))
             return
-        self._send(200, render_result(_safe_name(filename), result))
+        retained = store_training_upload(_safe_name(filename), payload, spacing, form)
+        self._send(200, render_result(_safe_name(filename), result, retained))
 
     def log_message(self, *args, **kwargs):
         return
